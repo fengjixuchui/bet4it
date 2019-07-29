@@ -354,6 +354,8 @@ int edit(){
 
 int main(){
     int choice;
+    setvbuf(stdout, 0, 2, 0);
+    setvbuf(stdin, 0, 2, 0);
     mmaped_area = init();
     ta_init();
 #ifdef DEBUG
