@@ -21,7 +21,7 @@
 #endif
 
 #ifndef TA_HEAP_LIMIT
-#define TA_HEAP_LIMIT (1 << 24)
+#define TA_HEAP_LIMIT 0xffffffff
 #endif
 
 #ifndef TA_HEAP_BLOCKS
@@ -309,9 +309,9 @@ int create(){
     int size;
 #ifdef DEBUG
     printf("plz input the size:\n");
-    read(STDIN_FILENO, mmaped_area, 0x100);
 #endif
-    size = atoi(mmaped_area);
+    scanf("%d", &size);
+    getchar();
     char *chunk = ta_alloc(size);
     for(int i = 0; i < max_count; ++i){
         if(addrs[i] == NULL){
@@ -325,9 +325,13 @@ int delete(){
     //delete a chunk
     int idx;
 #ifdef DEBUG
-    read(STDIN_FILENO, mmaped_area, 0x100);
+    printf("plz input the idx:\n");
 #endif
-    idx = atoi(mmaped_area);
+    scanf("%d", &idx);
+    getchar();
+    if(idx < 0 || idx >= max_count){
+        exit(1);
+    }
     ta_free(addrs[idx]);
     addrs[idx] = NULL; 
     return 0;
@@ -337,12 +341,14 @@ int edit(){
     //edit the content of the chunk
     int idx;
 #ifdef DEBUG
-    read(STDIN_FILENO, mmaped_area, 0x100);
+    printf("plz input the idx:\n");
 #endif
-    idx = atoi(mmaped_area);
-    if(DEBUG){
-        read(STDIN_FILENO, addrs[idx], 0x100);
+    scanf("%d", &idx);
+    getchar();
+    if(idx < 0 || idx >= max_count || addrs[idx] == NULL){
+        exit(1);
     }
+    read(STDIN_FILENO, addrs[idx], 0x100);
     return 0;
 }
 
@@ -354,18 +360,19 @@ int main(){
     printf("mmapped area : %p\n", mmaped_area);
 #endif
     while(1){
-#ifdef DEBUG
         //read from stdin for testing
-        read(STDIN_FILENO, mmaped_area, 0x1000);
-#endif
-        sscanf(mmaped_area, "%d", &choice);
+        scanf("%d", &choice);
+        getchar();
         switch(choice){
             case 1:
                 create();
+                break;
             case 2:
                 delete();
+                break;
             case 3:
                 edit();
+                break;
             default:
                 break;
         }
