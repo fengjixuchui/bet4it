@@ -1,2 +1,2 @@
 # bet4it
-Simple CTF challenge source code.
+Source code of a simple CTF heap challenge.
